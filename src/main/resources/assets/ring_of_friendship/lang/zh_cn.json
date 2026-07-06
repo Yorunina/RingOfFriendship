@@ -1,11 +1,24 @@
 {
   "item.ring_of_friendship.ring_of_friendship": "友谊之戒",
-  "item.ring_of_friendship.tooltip.friend": "已绑定至: %s",
+  "item.ring_of_friendship.tooltip.friend": "已绑定: %s",
   "item.ring_of_friendship.tooltip.unbound": "未绑定",
-  "item.ring_of_friendship.teleported": "已传送至 %s!",
+
+  "item.ring_of_friendship.tooltip.how_to_bind": "长按右键以绑定。",
+  "item.ring_of_friendship.tooltip.how_to_teleport": "长按右键以传送。",
+  "item.ring_of_friendship.tooltip.consumes_on_use": "在免于死亡时破碎。",
+
+  "item.ring_of_friendship.tooltip.status.ready": "§a状态: 已就绪",
+  "item.ring_of_friendship.tooltip.status.on_cooldown": "§c状态: 冷却中",
+
+  "item.ring_of_friendship.teleported": "已传送至 %s 的身边！",
+  "item.ring_of_friendship.teleported_spawn": "已传送至你的重生点！",
   "item.ring_of_friendship.friend_offline": "你的朋友不在线。",
   "item.ring_of_friendship.bound": "戒指已绑定至 %s。",
   "item.ring_of_friendship.saved": "友谊之戒使你免于一次致命伤害！",
-  "item.ring_of_friendship.friend_saved": "%s 被友谊之戒拯救并传送到了你的身边！",
-  "curios.tooltip.slot.ring": "可装备在戒指栏位"
+  "item.ring_of_friendship.saved_self": "友谊之戒拯救了你，并将你送回了重生点！",
+  "item.ring_of_friendship.friend_saved": "%s 被友谊之戒拯救，并传送到了你的身边！",
+  "item.ring_of_friendship.shattered": "你的友谊之戒在此过程中破碎了！",
+
+  "item.ring_of_friendship.magic_mirror": "魔镜",
+  "item.magic_mirror.tooltip": "长按右键会随机传送到其他手持魔镜的玩家旁；若无其他玩家手持魔镜，魔镜则会破碎。"
 }

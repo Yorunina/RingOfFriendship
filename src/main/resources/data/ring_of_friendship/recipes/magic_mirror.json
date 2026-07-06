@@ -1,19 +1,20 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "D",
-    "G"
+    " I ",
+    "IBI",
+    " I "
   ],
   "key": {
-    "D": {
-      "item": "minecraft:diamond"
+    "B": {
+      "item": "minecraft:glass"
     },
-    "G": {
-      "item": "minecraft:gold_ingot"
+    "I": {
+      "item": "minecraft:iron_ingot"
     }
   },
   "result": {
-    "item": "ring_of_friendship:ring_of_friendship",
+    "item": "ring_of_friendship:magic_mirror",
     "count": 1
   }
 }

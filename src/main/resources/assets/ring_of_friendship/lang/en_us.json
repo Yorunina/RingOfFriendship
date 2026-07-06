@@ -1,4 +1,24 @@
 {
   "item.ring_of_friendship.ring_of_friendship": "Ring of Friendship",
-  "item.ring_of_friendship.tooltip.friend": "Bound to: %s"
+  "item.ring_of_friendship.magic_mirror": "Magic Mirror",
+
+  "item.ring_of_friendship.tooltip.friend": "Bound to: %s",
+  "item.ring_of_friendship.tooltip.unbound": "Unbound",
+
+  "item.ring_of_friendship.tooltip.how_to_bind": "Hold right-click to bind.",
+  "item.ring_of_friendship.tooltip.how_to_teleport": "Hold right-click to teleport.",
+  "item.ring_of_friendship.tooltip.consumes_on_use": "Shatters when saving you from death.",
+
+  "item.ring_of_friendship.tooltip.status.ready": "§aStatus: Ready",
+  "item.ring_of_friendship.tooltip.status.on_cooldown": "§cStatus: On Cooldown",
+
+  "item.ring_of_friendship.teleported": "Teleported to %s!",
+  "item.ring_of_friendship.teleported_spawn": "Teleported to your spawn point!",
+  "item.ring_of_friendship.friend_offline": "Your friend is not online.",
+  "item.ring_of_friendship.bound": "Ring bound to %s.",
+  "item.ring_of_friendship.saved": "The Ring of Friendship saved you from a fatal blow!",
+  "item.ring_of_friendship.saved_self": "The Ring of Friendship saved you and returned you to your spawn point!",
+  "item.ring_of_friendship.friend_saved": "%s was saved by their Ring of Friendship and teleported to you!",
+  "item.ring_of_friendship.shattered": "Your Ring of Friendship shattered in the process!",
+  "item.magic_mirror.tooltip": "Hold right-click to teleport to a random player holding the mirror. If no other players are holding the mirror, the mirror will shatter."
 }

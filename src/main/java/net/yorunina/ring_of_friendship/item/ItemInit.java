@@ -17,6 +17,9 @@ public class ItemInit {
 
     public static final RegistryObject<Item> RING_OF_FRIENDSHIP = ITEMS.register("ring_of_friendship",
             () -> new RingOfFriendshipItem(new Item.Properties().stacksTo(1)));
+    public static final RegistryObject<Item> MAGIC_MIRROR = ITEMS.register("magic_mirror",
+            () -> new MagicMirrorItem(new Item.Properties().stacksTo(1)));
+
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
@@ -26,6 +29,7 @@ public class ItemInit {
     public static void buildContents(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CreativeModeTabs.COMBAT) {
             event.accept(RING_OF_FRIENDSHIP);
+            event.accept(MAGIC_MIRROR);
         }
     }
 }
