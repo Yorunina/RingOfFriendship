@@ -1,0 +1,11 @@
+{
+  "item.ring_of_friendship.ring_of_friendship": "友谊之戒",
+  "item.ring_of_friendship.tooltip.friend": "已绑定至: %s",
+  "item.ring_of_friendship.tooltip.unbound": "未绑定",
+  "item.ring_of_friendship.teleported": "已传送至 %s!",
+  "item.ring_of_friendship.friend_offline": "你的朋友不在线。",
+  "item.ring_of_friendship.bound": "戒指已绑定至 %s。",
+  "item.ring_of_friendship.saved": "友谊之戒使你免于一次致命伤害！",
+  "item.ring_of_friendship.friend_saved": "%s 被友谊之戒拯救并传送到了你的身边！",
+  "curios.tooltip.slot.ring": "可装备在戒指栏位"
+}
