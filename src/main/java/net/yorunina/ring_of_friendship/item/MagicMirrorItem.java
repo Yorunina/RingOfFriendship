@@ -1,8 +1,6 @@
 package net.yorunina.ring_of_friendship.item;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -20,7 +18,6 @@ import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.yorunina.ring_of_friendship.RingOfFriendship;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -46,6 +43,9 @@ public class MagicMirrorItem extends Item {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pHand) {
+        if (pPlayer.getCooldowns().isOnCooldown(this)) {
+            return InteractionResultHolder.pass(pPlayer.getItemInHand(pHand));
+        }
         pPlayer.startUsingItem(pHand);
         return InteractionResultHolder.consume(pPlayer.getItemInHand(pHand));
     }
@@ -58,7 +58,9 @@ public class MagicMirrorItem extends Item {
         ServerPlayer player = (ServerPlayer) pLivingEntity;
         MinecraftServer server = player.server;
         List<ServerPlayer> targetPlayerList = server.getPlayerList().getPlayers().stream()
-                .filter(pPlayer -> !pPlayer.equals(player) && (pPlayer.getOffhandItem().is(this) || pPlayer.getMainHandItem().is(this)) && !pPlayer.hasEffect(MobEffects.INVISIBILITY)).toList();
+                .filter(pPlayer -> !pPlayer.equals(player) && !pPlayer.isSpectator()
+                        && (pPlayer.getOffhandItem().is(this) || pPlayer.getMainHandItem().is(this))
+                        && !pPlayer.hasEffect(MobEffects.INVISIBILITY)).toList();
         RandomSource random = pLevel.getRandom();
         if (targetPlayerList.isEmpty()) {
             pLevel.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.GLASS_BREAK, player.getSoundSource(), 1.0F, 1.0F);
@@ -68,7 +70,7 @@ public class MagicMirrorItem extends Item {
         ServerPlayer targetPlayer = targetPlayerList.get(targetPlayerIndex);
         pLevel.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENDERMAN_TELEPORT, player.getSoundSource(), 1.0F, 1.0F);
         player.teleportTo(targetPlayer.serverLevel(), targetPlayer.getX(), targetPlayer.getY(), targetPlayer.getZ(), targetPlayer.getYRot(), targetPlayer.getXRot());
-        pLevel.playSound(null, targetPlayer.getX(), targetPlayer.getY(), targetPlayer.getZ(), SoundEvents.ENDERMAN_TELEPORT, targetPlayer.getSoundSource(), 1.0F, 1.0F);
+        targetPlayer.serverLevel().playSound(null, targetPlayer.getX(), targetPlayer.getY(), targetPlayer.getZ(), SoundEvents.ENDERMAN_TELEPORT, targetPlayer.getSoundSource(), 1.0F, 1.0F);
         player.getCooldowns().addCooldown(this, TELEPORT_COOLDOWN_TICKS);
         return pStack;
     }

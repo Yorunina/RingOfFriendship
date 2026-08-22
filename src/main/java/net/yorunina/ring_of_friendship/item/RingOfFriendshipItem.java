@@ -16,9 +16,10 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.ModList;
 import net.yorunina.ring_of_friendship.RingOfFriendship;
 import top.theillusivec4.curios.api.CuriosCapability;
 import top.theillusivec4.curios.api.SlotResult;
@@ -53,6 +54,9 @@ public class RingOfFriendshipItem extends Item {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pHand) {
+        if (pPlayer.getCooldowns().isOnCooldown(this)) {
+            return InteractionResultHolder.pass(pPlayer.getItemInHand(pHand));
+        }
         pPlayer.startUsingItem(pHand);
         return InteractionResultHolder.consume(pPlayer.getItemInHand(pHand));
     }
@@ -76,7 +80,7 @@ public class RingOfFriendshipItem extends Item {
             if (player.getGameProfile().getId().equals(friendId)) {
                 // Single-player: Teleport to spawn
                 teleportToSpawn(player);
-                pLevel.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENDERMAN_TELEPORT, player.getSoundSource(), 1.0F, 1.0F);
+                player.serverLevel().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENDERMAN_TELEPORT, player.getSoundSource(), 1.0F, 1.0F);
                 player.getCooldowns().addCooldown(this, TELEPORT_COOLDOWN_TICKS);
                 player.sendSystemMessage(Component.translatable("item.ring_of_friendship.teleported_spawn").withStyle(ChatFormatting.GREEN));
             } else {
@@ -85,7 +89,7 @@ public class RingOfFriendshipItem extends Item {
                 if (friend != null) {
                     player.getCooldowns().addCooldown(this, TELEPORT_COOLDOWN_TICKS);
                     player.teleportTo(friend.serverLevel(), friend.getX(), friend.getY(), friend.getZ(), friend.getYRot(), friend.getXRot());
-                    pLevel.playSound(null, friend.getX(), friend.getY(), friend.getZ(), SoundEvents.ENDERMAN_TELEPORT, friend.getSoundSource(), 1.0F, 1.0F);
+                    friend.serverLevel().playSound(null, friend.getX(), friend.getY(), friend.getZ(), SoundEvents.ENDERMAN_TELEPORT, friend.getSoundSource(), 1.0F, 1.0F);
                     player.sendSystemMessage(Component.translatable("item.ring_of_friendship.teleported", friend.getName()).withStyle(ChatFormatting.GREEN));
                 } else {
                     player.sendSystemMessage(Component.translatable("item.ring_of_friendship.friend_offline").withStyle(ChatFormatting.RED));
@@ -124,7 +128,7 @@ public class RingOfFriendshipItem extends Item {
     }
 
     @SubscribeEvent
-    public static void onLivingHurt(LivingHurtEvent event) {
+    public static void onLivingDamage(LivingDamageEvent event) {
         if (event.getEntity().level().isClientSide()) {
             return;
         }
@@ -161,7 +165,7 @@ public class RingOfFriendshipItem extends Item {
         return null;
     }
 
-    private static boolean trySavePlayer(ServerPlayer player, ItemStack stack, LivingHurtEvent event) {
+    private static boolean trySavePlayer(ServerPlayer player, ItemStack stack, LivingDamageEvent event) {
         if (player.getCooldowns().isOnCooldown(stack.getItem())) {
             return false;
         }
@@ -177,7 +181,7 @@ public class RingOfFriendshipItem extends Item {
             event.setCanceled(true);
             player.setHealth(player.getMaxHealth() * 0.5f);
             teleportToSpawn(player);
-            player.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENDERMAN_TELEPORT, player.getSoundSource(), 1.0F, 1.0F);
+            player.serverLevel().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENDERMAN_TELEPORT, player.getSoundSource(), 1.0F, 1.0F);
             player.getCooldowns().addCooldown(stack.getItem(), DEATH_SAVE_COOLDOWN_TICKS);
             player.sendSystemMessage(Component.translatable("item.ring_of_friendship.saved_self").withStyle(ChatFormatting.GOLD));
             return true;
@@ -188,6 +192,7 @@ public class RingOfFriendshipItem extends Item {
                 event.setCanceled(true);
                 player.setHealth(player.getMaxHealth() * 0.5f);
                 player.teleportTo(friend.serverLevel(), friend.getX(), friend.getY(), friend.getZ(), friend.getYRot(), friend.getXRot());
+                friend.serverLevel().playSound(null, friend.getX(), friend.getY(), friend.getZ(), SoundEvents.ENDERMAN_TELEPORT, friend.getSoundSource(), 1.0F, 1.0F);
                 player.getCooldowns().addCooldown(stack.getItem(), DEATH_SAVE_COOLDOWN_TICKS);
                 player.sendSystemMessage(Component.translatable("item.ring_of_friendship.saved").withStyle(ChatFormatting.GOLD));
                 friend.sendSystemMessage(Component.translatable("item.ring_of_friendship.friend_saved", player.getName()).withStyle(ChatFormatting.GOLD));
@@ -211,6 +216,9 @@ public class RingOfFriendshipItem extends Item {
 
     private static class CuriosCompat {
         private static Optional<SlotResult> findRingSlot(Player player) {
+            if (!ModList.get().isLoaded("curios")) {
+                return Optional.empty();
+            }
             return player.getCapability(CuriosCapability.INVENTORY)
                     .map(handler -> handler.findFirstCurio(ItemInit.RING_OF_FRIENDSHIP.get()))
                     .orElse(Optional.empty());
